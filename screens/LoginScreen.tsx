@@ -47,7 +47,7 @@ export default function LoginScreen({ navigation }: any) {
         }
         alert('¡Bienvenido Trabajador! Redirigiendo...');
         setLoading(false);
-        navigation.replace('GestionVacantes');
+        navigation.replace('PanelReclutador');
         return;
       }
 
@@ -135,11 +135,11 @@ export default function LoginScreen({ navigation }: any) {
 
 const styles = StyleSheet.create({
   flexContainer: { flex: 1, backgroundColor: '#0F172A' },
-  scrollContainer: { flexGrow: 1, justifyContent: 'center', padding: 24 },
+  scrollContainer: { flexGrow: 1, justifyContent: 'center', alignItems:'center', padding: 24 },
   headerContainer: { alignItems: 'center', marginBottom: 32 },
   appName: { fontSize: 42, fontWeight: '900', color: '#38BDF8', letterSpacing: 4 },
   tagline: { fontSize: 13, color: '#94A3B8', marginTop: 4, textAlign: 'center' },
-  card: { backgroundColor: '#1E293B', borderRadius: 16, padding: 24, borderWidth: 1, borderColor: '#334155' },
+  card: { backgroundColor: '#1E293B', borderRadius: 16, padding: 24, borderWidth: 1, borderColor: '#334155', width:'100%', maxWidth: 450},
   cardTitle: { fontSize: 22, fontWeight: '700', color: '#F8FAFC', marginBottom: 20, textAlign: 'center' },
   inputGroup: { marginBottom: 16 },
   label: { fontSize: 13, color: '#CBD5E1', marginBottom: 6, fontWeight: '600' },

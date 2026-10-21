@@ -9,6 +9,7 @@ import EmpresaHomeScreen from './screens/EmpresaHomeScreen';
 import CandidatoHomeScreen from './screens/CandidatoHomeScreen';
 import CandidatosHomeScreen from './screens/CandidatosHomeScreen';
 import GestionVacantesScreen from './screens/GestionVacantesScreen';
+import PanelReclutadorScreen from './screens/PanelReclutadorScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,7 @@ export default function App() {
   if(Platform.OS === 'web' && typeof window !== 'undefined'){
     const rol = localStorage.getItem('kadaf_rol');
     if (rol === 'trabajador'){
-      pantallaInicial = 'GestionVacantes';
+      pantallaInicial = 'PanelReclutador';
     }else if (rol === 'candidato'){
       pantallaInicial = 'Vacantes';
     }
@@ -33,6 +34,7 @@ export default function App() {
         <Stack.Screen name="CandidatoHome" component={CandidatoHomeScreen} />
         <Stack.Screen name="Vacantes" component={CandidatosHomeScreen} />
         <Stack.Screen name="GestionVacantes" component={GestionVacantesScreen} />
+        <Stack.Screen name="PanelReclutador" component={PanelReclutadorScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

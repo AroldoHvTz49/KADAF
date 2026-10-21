@@ -140,11 +140,11 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
 
 const styles = StyleSheet.create({
   flexContainer: { flex: 1, backgroundColor: '#0F172A' },
-  scrollContainer: { flexGrow: 1, justifyContent: 'center', padding: 24 },
+  scrollContainer: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
   headerContainer: { alignItems: 'center', marginBottom: 28 },
   appName: { fontSize: 38, fontWeight: '900', color: '#38BDF8', letterSpacing: 3 },
   tagline: { fontSize: 13, color: '#94A3B8', marginTop: 4 },
-  card: { backgroundColor: '#1E293B', borderRadius: 16, padding: 24, borderWidth: 1, borderColor: '#334155' },
+  card: { backgroundColor: '#1E293B', borderRadius: 16, padding: 24, borderWidth: 1, borderColor: '#334155', width:'100%', maxWidth: 450 },
   cardTitle: { fontSize: 18, fontWeight: '700', color: '#F8FAFC', marginBottom: 16, textAlign: 'center' },
   inputGroup: { marginBottom: 14 },
   label: { fontSize: 13, color: '#CBD5E1', marginBottom: 6, fontWeight: '600' },
