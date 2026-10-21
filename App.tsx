@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -12,9 +13,20 @@ import GestionVacantesScreen from './screens/GestionVacantesScreen';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  let pantallaInicial = 'Login';
+
+  if(Platform.OS === 'web' && typeof window !== 'undefined'){
+    const rol = localStorage.getItem('kadaf_rol');
+    if (rol === 'trabajador'){
+      pantallaInicial = 'GestionVacantes';
+    }else if (rol === 'candidato'){
+      pantallaInicial = 'Vacantes';
+    }
+  } 
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+      <Stack.Navigator initialRouteName={pantallaInicial} screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
         <Stack.Screen name="EmpresaHome" component={EmpresaHomeScreen} />

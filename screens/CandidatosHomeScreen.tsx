@@ -8,7 +8,8 @@ import {
   TouchableOpacity, 
   ActivityIndicator,
   SafeAreaView,
-  Modal
+  Modal,
+  Platform
 } from 'react-native';
 import { supabase } from '../services/supabase';
 
@@ -119,6 +120,14 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
     </View>
   );
 
+  const cerrarSesion = async () => {
+    if(Platform.OS === 'web'){
+      localStorage.removeItem('kadaf_rol');
+    }
+    await supabase.auth.signOut();
+    navigation.replace('Login');
+};
+
   return (
     <SafeAreaView style={styles.container}>
     
@@ -129,9 +138,9 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
         </View>
         <TouchableOpacity 
           style={styles.logoutButton} 
-          onPress={() => navigation && navigation.replace('Login')}
+          onPress={cerrarSesion}
         >
-          <Text style={styles.logoutButtonText}>Salir</Text>
+          <Text style={styles.logoutButtonText}>Cerrar Sesion</Text>
         </TouchableOpacity>
       </View>
 
@@ -158,6 +167,8 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
           data={vacantesFiltradas}
           keyExtractor={(item) => item.id}
           renderItem={renderCardVacante}
+          refreshing={loading} // esto muestra como el circulo de carga mientras se actualiza 
+          onRefresh={fetchVacantes} //lo vuelve a ejecutar si el user lo vuelve a pedir deslizando hacia abajo
           style={styles.listStyle}
           contentContainerStyle={styles.listPadding}
           showsVerticalScrollIndicator={false}

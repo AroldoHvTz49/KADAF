@@ -13,6 +13,7 @@ import {
   Text,
   TextInput,
   View,
+  TouchableOpacity
 } from 'react-native';
 import { supabase } from '../services/supabase';
 
@@ -39,7 +40,7 @@ const COLORES = {
   rojo: '#B42318',
 };
 
-export default function GestionVacantesScreen() {
+export default function GestionVacantesScreen({ navigation }: { navigation: any }) {
   const [vacantes, setVacantes] = useState<Vacante[]>([]);
   const [busqueda, setBusqueda] = useState('');
   const [cargando, setCargando] = useState(true);
@@ -67,10 +68,18 @@ export default function GestionVacantesScreen() {
     setTipoMensaje(tipo);
   };
 
+  const cerrarSesion = async () => {
+    if(Platform.OS === 'web'){
+      localStorage.removeItem('kadaf_rol');
+    }
+    await supabase.auth.signOut();
+    navigation.replace('Login');
+};
+
   const cargarVacantes = useCallback(async () => {
     setCargando(true);
     setMensaje('');
-
+    
     try {
       const { data, error } = await supabase
         .from('vacantes')
@@ -341,6 +350,21 @@ export default function GestionVacantesScreen() {
         <Text style={styles.subtituloEncabezado}>
           Panel de administración
         </Text>
+
+        <TouchableOpacity
+            onPress={cerrarSesion}
+            style={{
+                backgroundColor: '#334155',
+                paddingVertical: 8,
+                paddingHorizontal: 14,
+                borderRadius: 8,
+            }}
+          >
+              <Text style={{
+                color: '#CBD5E1',
+                fontSize: 12,
+                fontWeight: '700',}}> Cerrar sesión</Text>
+          </TouchableOpacity>
       </View>
 
       <ScrollView

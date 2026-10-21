@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { 
   StyleSheet, 
   Text, 
@@ -41,9 +42,12 @@ export default function LoginScreen({ navigation }: any) {
       }
 
       if (trabajador) {
-        alert('¡Trabajador encontrado! Redirigiendo...');
+        if(Platform.OS === 'web'){
+          localStorage.setItem('kadaf_rol', 'trabajador');
+        }
+        alert('¡Bienvenido Trabajador! Redirigiendo...');
         setLoading(false);
-        navigation.navigate('GestionVacantes');
+        navigation.replace('GestionVacantes');
         return;
       }
 
@@ -60,13 +64,15 @@ export default function LoginScreen({ navigation }: any) {
       }
 
       if (candidato) {
-        alert('¡Candidato encontrado! Redirigiendo...');
+        if(Platform.OS === 'web'){
+          localStorage.setItem('kadaf_rol', 'candidato');
+        }
+
+        alert('¡Bienvenido Candidato! Redirigiendo...');
         setLoading(false);
-        navigation.navigate('Vacantes');
+        navigation.replace('Vacantes');
         return;
       }
-
-      
       alert('Credenciales no encontradas. Verifica correo y contraseña.');
 
     } catch (error: any) {
