@@ -10,6 +10,7 @@ import CandidatoHomeScreen from './screens/CandidatoHomeScreen';
 import CandidatosHomeScreen from './screens/CandidatosHomeScreen';
 import GestionVacantesScreen from './screens/GestionVacantesScreen';
 import PanelReclutadorScreen from './screens/PanelReclutadorScreen';
+import PostulacionesScreen from './screens/PostulacionesScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,7 @@ export default function App() {
         <Stack.Screen name="Vacantes" component={CandidatosHomeScreen} />
         <Stack.Screen name="GestionVacantes" component={GestionVacantesScreen} />
         <Stack.Screen name="PanelReclutador" component={PanelReclutadorScreen}/>
+        <Stack.Screen name="Postulaciones" component={PostulacionesScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

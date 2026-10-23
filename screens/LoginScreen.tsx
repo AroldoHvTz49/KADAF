@@ -29,57 +29,69 @@ export default function LoginScreen({ navigation }: any) {
     setLoading(true);
 
     try {
-      const { data: trabajador, error: errTrabajador } = await supabase
-        .from('trabajadores')
-        .select('*')
-        .eq('email', cleanEmail)
-        .eq('password', password)
-        .maybeSingle();
+      const { data, error } = await supabase.auth.signInWithPassword({
+      email: cleanEmail,
+      password: password
+    });
 
-      if (errTrabajador) {
-        alert('Error en BD Trabajadores: ' + errTrabajador.message);
-        return;
-      }
-
-      if (trabajador) {
-        if(Platform.OS === 'web'){
-          localStorage.setItem('kadaf_rol', 'trabajador');
-        }
-        alert('¡Bienvenido Trabajador! Redirigiendo...');
-        setLoading(false);
-        navigation.replace('PanelReclutador');
-        return;
-      }
-
-      const { data: candidato, error: errCandidato } = await supabase
-        .from('candidatos')
-        .select('*')
-        .eq('email', cleanEmail)
-        .eq('password', password)
-        .maybeSingle();
-
-      if (errCandidato) {
-        alert('Error en BD Candidatos: ' + errCandidato.message);
-        return;
-      }
-
-      if (candidato) {
-        if(Platform.OS === 'web'){
-          localStorage.setItem('kadaf_rol', 'candidato');
-        }
-
-        alert('¡Bienvenido Candidato! Redirigiendo...');
-        setLoading(false);
-        navigation.replace('Vacantes');
-        return;
-      }
-      alert('Credenciales no encontradas. Verifica correo y contraseña.');
-
-    } catch (error: any) {
-      alert('Error inesperado: ' + error.message);
-    } finally {
-      setLoading(false);
+    if (error) {
+      alert('No se pudo iniciar sesión: ' + error.message);
+      return;
     }
+
+    const usuarioId = data.user?.id;
+
+    if (!usuarioId) {
+      alert('No se encontró el usuario.');
+      return;
+    }
+
+    const { data: trabajador, error: errorTrabajador } = await supabase
+      .from('trabajadores')
+      .select('id')
+      .eq('user_id', usuarioId)
+      .maybeSingle();
+
+    if (errorTrabajador) {
+      throw errorTrabajador;
+    }
+
+    if (trabajador) {
+      if (Platform.OS === 'web') {
+        localStorage.setItem('kadaf_rol', 'trabajador');
+      }
+
+      navigation.replace('PanelReclutador');
+      return;
+    }
+
+    const { data: candidato, error: errorCandidato } = await supabase
+      .from('candidatos')
+      .select('id')
+      .eq('user_id', usuarioId)
+      .maybeSingle();
+
+    if (errorCandidato) {
+      throw errorCandidato;
+    }
+
+    if (candidato) {
+      if (Platform.OS === 'web') {
+        localStorage.setItem('kadaf_rol', 'candidato');
+      }
+
+      navigation.replace('Vacantes');
+      return;
+    }
+
+    await supabase.auth.signOut();
+    alert('Tu cuenta no tiene un perfil vinculado. Contacta al administrador.');
+
+  } catch (error: any) {
+    alert('Error al iniciar sesión: ' + error.message);
+  } finally {
+    setLoading(false);
+  }
   };
 
   return (

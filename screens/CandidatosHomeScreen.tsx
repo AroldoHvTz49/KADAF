@@ -85,8 +85,7 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
 
 
   const handlePostularme = (item: Vacante) => {
-    setVacanteSeleccionada(item);
-    setModalVisible(true);
+    navigation.navigate('Postulaciones', {vacanteId: String(item.id), VacanteTitulo: item.titulo});
   };
 
  

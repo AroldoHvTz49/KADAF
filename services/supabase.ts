@@ -7,8 +7,8 @@ const supabaseAnonKey = 'sb_publishable_6kk-Hjbp46ysEOEMWB3XzQ_4G-flr6r';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    persistSession: false, 
-    autoRefreshToken: false,
+    persistSession: true, 
+    autoRefreshToken: true,
     detectSessionInUrl: false,
   },
 });

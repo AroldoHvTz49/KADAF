@@ -35,29 +35,31 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
     setLoading(true);
 
     try {
-      
-      const { error } = await supabase
-        .from('candidatos')
-        .insert([
-          {
-            nombre_completo: cleanNombre,
-            email: cleanEmail,
-            password: password,
+      const { error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password: password,
+        options:{
+          data:{
+            nombre: cleanNombre
           }
-        ]);
+        }
+      })
 
-      if (error) throw error;
+      if (error){
+        alert('Error al registrarse: '+ error.message);
+        return;
+      };
 
       
-      alert('¡Cuenta creada con éxito! Ahora puedes iniciar sesión.');
+      alert('Registro Completado. Confirma tu cuenta por correo electronico para iniciar sesion.');
       setLoading(false);
 
-      if (navigation) {
-        navigation.replace('Login'); 
-      }
+      navigation?.replace('Login'); 
+
 
     } catch (error: any) {
       alert('Error al registrar: ' + (error.message || 'Inténtalo de nuevo.'));
+    } finally{
       setLoading(false);
     }
   };
