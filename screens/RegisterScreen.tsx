@@ -1,14 +1,15 @@
+
 import React, { useState } from 'react';
-import { 
-  StyleSheet, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  View, 
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ScrollView 
+  ScrollView
 } from 'react-native';
 import { supabase } from '../services/supabase';
 
@@ -16,13 +17,23 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [educacion, setEducacion] = useState('');
+  const [experiencia, setExperiencia] = useState('');
+  const [habilidades, setHabilidades] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleRegister = async () => {
     const cleanNombre = nombre.trim();
     const cleanEmail = email.trim().toLowerCase();
 
-    if (!cleanNombre || !cleanEmail || !password) {
+    if (
+      !cleanNombre ||
+      !cleanEmail ||
+      !password ||
+      !educacion.trim() ||
+      !experiencia.trim() ||
+      !habilidades.trim()
+    ) {
       alert('Por favor completa todos los campos.');
       return;
     }
@@ -32,44 +43,56 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
       return;
     }
 
+    const listaHabilidades = habilidades
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean);
+
+    if (listaHabilidades.length === 0) {
+      alert('Escribe al menos una habilidad.');
+      return;
+    }
+
     setLoading(true);
 
     try {
       const { error } = await supabase.auth.signUp({
         email: cleanEmail,
         password: password,
-        options:{
-          data:{
-            nombre: cleanNombre
+        options: {
+          data: {
+            nombre: cleanNombre,
+            educacion: educacion.trim(),
+            experiencia: experiencia.trim(),
+            habilidades: listaHabilidades
           }
         }
-      })
+      });
 
-      if (error){
-        alert('Error al registrarse: '+ error.message);
+      if (error) {
+        alert('Error al registrarse: ' + error.message);
         return;
-      };
+      }
 
-      
-      alert('Registro Completado. Confirma tu cuenta por correo electronico para iniciar sesion.');
-      setLoading(false);
-
-      navigation?.replace('Login'); 
-
+      alert('Registro completado. Confirma tu cuenta por correo electrónico para iniciar sesión.');
+      navigation?.replace('Login');
 
     } catch (error: any) {
       alert('Error al registrar: ' + (error.message || 'Inténtalo de nuevo.'));
-    } finally{
+    } finally {
       setLoading(false);
     }
   };
 
   return (
-    <KeyboardAvoidingView 
-      style={styles.flexContainer} 
+    <KeyboardAvoidingView
+      style={styles.flexContainer}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <ScrollView contentContainerStyle={styles.scrollContainer} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.headerContainer}>
           <Text style={styles.appName}>KADAF</Text>
           <Text style={styles.tagline}>Registro de Candidatos</Text>
@@ -114,9 +137,48 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
             />
           </View>
 
-          <TouchableOpacity 
-            style={styles.primaryButton} 
-            onPress={handleRegister} 
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Educación</Text>
+            <TextInput
+              style={[styles.input, styles.inputGrande]}
+              placeholder="Ej. Estudiante de Ingeniería en Sistemas"
+              placeholderTextColor="#A0AEC0"
+              value={educacion}
+              onChangeText={setEducacion}
+              multiline
+              textAlignVertical="top"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Experiencia</Text>
+            <TextInput
+              style={[styles.input, styles.inputGrande]}
+              placeholder="Ej. Proyectos con Python y SQL. Si no tienes, escribe Sin experiencia."
+              placeholderTextColor="#A0AEC0"
+              value={experiencia}
+              onChangeText={setExperiencia}
+              multiline
+              textAlignVertical="top"
+            />
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.label}>Habilidades (separadas por comas)</Text>
+            <TextInput
+              style={[styles.input, styles.inputGrande]}
+              placeholder="Ej. Python, SQL, Excel, Trabajo en equipo"
+              placeholderTextColor="#A0AEC0"
+              value={habilidades}
+              onChangeText={setHabilidades}
+              multiline
+              textAlignVertical="top"
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.primaryButton}
+            onPress={handleRegister}
             disabled={loading}
           >
             {loading ? (
@@ -126,12 +188,13 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
             )}
           </TouchableOpacity>
 
-          <TouchableOpacity 
-            style={styles.secondaryButton} 
+          <TouchableOpacity
+            style={styles.secondaryButton}
             onPress={() => navigation && navigation.goBack()}
           >
             <Text style={styles.secondaryButtonText}>
-              ¿Ya tienes cuenta? <Text style={styles.linkBold}>Inicia Sesión</Text>
+              ¿Ya tienes cuenta?{' '}
+              <Text style={styles.linkBold}>Inicia Sesión</Text>
             </Text>
           </TouchableOpacity>
         </View>
@@ -141,19 +204,94 @@ export default function RegisterScreen({ navigation }: { navigation?: any }) {
 }
 
 const styles = StyleSheet.create({
-  flexContainer: { flex: 1, backgroundColor: '#0F172A' },
-  scrollContainer: { flexGrow: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
-  headerContainer: { alignItems: 'center', marginBottom: 28 },
-  appName: { fontSize: 38, fontWeight: '900', color: '#38BDF8', letterSpacing: 3 },
-  tagline: { fontSize: 13, color: '#94A3B8', marginTop: 4 },
-  card: { backgroundColor: '#1E293B', borderRadius: 16, padding: 24, borderWidth: 1, borderColor: '#334155', width:'100%', maxWidth: 450 },
-  cardTitle: { fontSize: 18, fontWeight: '700', color: '#F8FAFC', marginBottom: 16, textAlign: 'center' },
-  inputGroup: { marginBottom: 14 },
-  label: { fontSize: 13, color: '#CBD5E1', marginBottom: 6, fontWeight: '600' },
-  input: { backgroundColor: '#0F172A', borderWidth: 1, borderColor: '#334155', borderRadius: 10, paddingHorizontal: 14, height: 48, color: '#F8FAFC', fontSize: 15 },
-  primaryButton: { backgroundColor: '#0284C7', height: 50, borderRadius: 10, justifyContent: 'center', alignItems: 'center', marginTop: 10 },
-  primaryButtonText: { color: '#FFFFFF', fontSize: 15, fontWeight: '700', letterSpacing: 1 },
-  secondaryButton: { marginTop: 18, alignItems: 'center' },
-  secondaryButtonText: { color: '#94A3B8', fontSize: 14 },
-  linkBold: { color: '#38BDF8', fontWeight: '700' },
+  flexContainer: {
+    flex: 1,
+    backgroundColor: '#0F172A'
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 24
+  },
+  headerContainer: {
+    alignItems: 'center',
+    marginBottom: 28
+  },
+  appName: {
+    fontSize: 38,
+    fontWeight: '900',
+    color: '#38BDF8',
+    letterSpacing: 3
+  },
+  tagline: {
+    fontSize: 13,
+    color: '#94A3B8',
+    marginTop: 4
+  },
+  card: {
+    backgroundColor: '#1E293B',
+    borderRadius: 16,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: '#334155',
+    width: '100%',
+    maxWidth: 450
+  },
+  cardTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#F8FAFC',
+    marginBottom: 16,
+    textAlign: 'center'
+  },
+  inputGroup: {
+    marginBottom: 14
+  },
+  label: {
+    fontSize: 13,
+    color: '#CBD5E1',
+    marginBottom: 6,
+    fontWeight: '600'
+  },
+  input: {
+    backgroundColor: '#0F172A',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    height: 48,
+    color: '#F8FAFC',
+    fontSize: 15
+  },
+  inputGrande: {
+    height: 90,
+    paddingTop: 12
+  },
+  primaryButton: {
+    backgroundColor: '#0284C7',
+    height: 50,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 10
+  },
+  primaryButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: 1
+  },
+  secondaryButton: {
+    marginTop: 18,
+    alignItems: 'center'
+  },
+  secondaryButtonText: {
+    color: '#94A3B8',
+    fontSize: 14
+  },
+  linkBold: {
+    color: '#38BDF8',
+    fontWeight: '700'
+  }
 });

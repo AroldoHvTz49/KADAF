@@ -24,6 +24,7 @@ type Vacante = {
   salario: number;
   ubicacion: string | null;
   descripcion: string | null;
+  requisitos: string[] | null;
   activa: boolean | null;
   created_at: string;
 };
@@ -56,6 +57,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
   const [salario, setSalario] = useState('');
   const [ubicacion, setUbicacion] = useState('');
   const [descripcion, setDescripcion] = useState('');
+  const [requisitos, setRequisitos] = useState('');
 
   const [mensaje, setMensaje] = useState('');
   const [tipoMensaje, setTipoMensaje] = useState<'error' | 'exito'>('error');
@@ -84,7 +86,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
       const { data, error } = await supabase
         .from('vacantes')
         .select(
-          'id, titulo, empresa, salario, ubicacion, descripcion, activa, created_at',
+          'id, titulo, empresa, salario, ubicacion, descripcion, requisitos, activa, created_at',
         )
         .order('created_at', { ascending: false });
 
@@ -117,6 +119,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
     setSalario('');
     setUbicacion('');
     setDescripcion('');
+    setRequisitos('');
   };
 
   const abrirFormulario = () => {
@@ -134,6 +137,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
     setSalario(String(vacante.salario ?? ''));
     setUbicacion(vacante.ubicacion ?? '');
     setDescripcion(vacante.descripcion ?? '');
+    setRequisitos((vacante.requisitos ?? []).join('\n'));
     setModalVisible(true);
   };
 
@@ -150,10 +154,11 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
     const empresaLimpia = empresa.trim();
     const salarioTexto = salario.trim().replace(',', '.');
     const salarioNumero = Number(salarioTexto);
+    const listaRequisitos = requisitos.split(/\r?\n/).map(item => item.trim()).filter(Boolean);
 
-    if (!tituloLimpio || !empresaLimpia || !salarioTexto) {
+    if (!tituloLimpio || !empresaLimpia || !salarioTexto || listaRequisitos.length === 0) {
       mostrarMensaje(
-        'Completa el título, la empresa y el salario antes de continuar.',
+        'Completa el título, la empresa, el salario y al menos un requisito.',
       );
       return;
     }
@@ -183,6 +188,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
         salario: salarioNumero,
         ubicacion: ubicacion.trim() || null,
         descripcion: descripcion.trim() || null,
+        requisitos: listaRequisitos,
       };
 
       const consulta = vacanteEditandoId
@@ -199,7 +205,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
 
       const { data, error } = await consulta
         .select(
-          'id, titulo, empresa, salario, ubicacion, descripcion, activa, created_at',
+          'id, titulo, empresa, salario, ubicacion, descripcion, requisitos, activa, created_at',
         )
         .single();
 
@@ -269,7 +275,7 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
         .from('vacantes')
         .update({ activa: nuevoEstado })
         .eq('id', vacante.id)
-        .select('id, titulo, empresa, salario, ubicacion, descripcion, activa, created_at')
+        .select('id, titulo, empresa, salario, ubicacion, descripcion, requisitos, activa, created_at')
         .single();
 
       if (error) {
@@ -665,6 +671,18 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
                 textAlignVertical="top"
               />
 
+              <Text style={styles.etiqueta}>Requisitos del puesto * (uno por línea)</Text>
+              <TextInput
+                style={[styles.campo, styles.campoDescripcion]}
+                placeholder={'Ej. Manejo de Excel\nConocimientos de SQL\nTrabajo en equipo'}
+                placeholderTextColor="#8791A5"
+                value={requisitos}
+                onChangeText={setRequisitos}
+                editable={!guardando}
+                multiline
+                textAlignVertical="top"
+              />
+
               {mensaje !== '' && (
                 <View style={styles.mensajeError}>
                   <Text style={styles.textoError}>{mensaje}</Text>
@@ -744,6 +762,8 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
               <Text style={styles.detalleTexto}>{vacanteDetalle?.activa ? 'Activa' : 'Inactiva'}</Text>
               <Text style={styles.etiqueta}>Descripción</Text>
               <Text style={styles.detalleTexto}>{vacanteDetalle?.descripcion || 'Sin descripción.'}</Text>
+              <Text style={styles.etiqueta}>Requisitos</Text>
+              <Text style={styles.detalleTexto}>{vacanteDetalle?.requisitos?.length ? vacanteDetalle.requisitos.map(r => '• ' + r).join('\n') : 'Sin requisitos.'}</Text>
             </ScrollView>
             <View style={styles.detalleAcciones}>
               <Pressable style={styles.botonCancelar} onPress={() => setVacanteDetalle(null)}>

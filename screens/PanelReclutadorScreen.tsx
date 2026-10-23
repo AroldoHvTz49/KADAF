@@ -108,7 +108,7 @@ export default function Reclutador({ navigation }: { navigation: any }) {
 
         <Text style={styles.subtitulo}>Accesos rápidos</Text>
         <View style={styles.accesos}>
-          {['Vacantes', 'Candidatos'].map(nombre => (
+          {['Vacantes', 'Postulaciones'].map(nombre => (
             <Pressable
             key={nombre}
             style={styles.boton}
