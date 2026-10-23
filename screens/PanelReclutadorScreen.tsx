@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { supabase } from '../services/supabase';
 import GestionVacantesScreen from './GestionVacantesScreen';
+import GestionPostulacionesScreen from './GestionPostulacionesScreen';
 
 const MESES = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
 
@@ -11,16 +12,17 @@ type DatoMensual = { mes: string; vacantes: number; candidatos: number };
 
 export default function Reclutador({ navigation }: { navigation: any }) {
   const [seccionActiva, setSeccionActiva] = useState('Inicio');
-  const [conteos, setConteos] = useState({ vacantes: 0, candidatos: 0 });
+  const [conteos, setConteos] = useState({ vacantes: 0, candidatos: 0, postulaciones: 0});
   const [datosMensuales, setDatosMensuales] = useState<DatoMensual[]>([]);
 
   useEffect(() => {
     let activo = true;
 
     const cargarEstadisticas = async () => {
-      const [v, c] = await Promise.all([
+      const [v, c, p] = await Promise.all([
         supabase.from('vacantes').select('*'),
         supabase.from('candidatos').select('*'),
+        supabase.from('postulaciones').select('*'),
       ]);
 
       if (v.error || c.error) {
@@ -30,9 +32,10 @@ export default function Reclutador({ navigation }: { navigation: any }) {
 
       const vacantes = v.data ?? [];
       const candidatos = c.data ?? [];
+      const postulaciones = p.data ?? [];
       if (!activo) return;
 
-      setConteos({ vacantes: vacantes.length, candidatos: candidatos.length });
+      setConteos({ vacantes: vacantes.length, candidatos: candidatos.length, postulaciones: postulaciones.length });
 
       const hoy = new Date();
       const meses = Array.from({ length: 6 }, (_, i) => {
@@ -72,6 +75,7 @@ export default function Reclutador({ navigation }: { navigation: any }) {
       .channel('estadisticas-reclutador')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'vacantes' }, cargarEstadisticas)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'candidatos' }, cargarEstadisticas)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'postulaciones' }, cargarEstadisticas)
       .subscribe();
 
     return () => {
@@ -93,7 +97,7 @@ export default function Reclutador({ navigation }: { navigation: any }) {
           {[
             { titulo: 'Vacantes', valor: conteos.vacantes },
             { titulo: 'Candidatos', valor: conteos.candidatos },
-            { titulo: 'Postulaciones', valor: '—' },
+            { titulo: 'Postulaciones', valor: conteos.postulaciones},
           ].map(item => (
             <View key={item.titulo} style={styles.tarjeta}>
               <Text style={styles.etiqueta}>{item.titulo}</Text>
@@ -151,6 +155,8 @@ export default function Reclutador({ navigation }: { navigation: any }) {
       </ScrollView>
       ) : seccionActiva === 'Vacantes' ? (
         <GestionVacantesScreen navigation={navigation} />
+      ) : seccionActiva === 'Postulaciones'? (
+        <GestionPostulacionesScreen/>
       ) : (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text>Seccion de {seccionActiva}</Text>
@@ -159,7 +165,7 @@ export default function Reclutador({ navigation }: { navigation: any }) {
 
       {/* Menú fijo al final de la pantalla */}
       <View style={styles.menu}>
-        {['Inicio', 'Vacantes', 'Candidatos', 'Perfil'].map(nombre => (
+        {['Inicio', 'Vacantes', 'Postulaciones', 'Perfil'].map(nombre => (
           <Pressable key={nombre} onPress={() => setSeccionActiva(nombre)} style={styles.opcion}>
             <Text style={[styles.opcionMenu, seccionActiva === nombre && styles.activo]}>
               {nombre}
