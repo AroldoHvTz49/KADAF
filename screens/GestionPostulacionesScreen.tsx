@@ -9,9 +9,12 @@ import {
   Linking
 } from 'react-native';
 import { supabase } from '../services/supabase';
+import PerfilCandidatoScreen from './PerfilCandidatoScreen';
 
 type Postulacion = {
   id: string;
+  candidato_id: string;
+  vacante_id: string;
   candidato: string;
   email: string;
   vacante: string;
@@ -24,6 +27,7 @@ const estados = ['En proceso', 'Entrevista', 'Rechazada', 'Contratada'];
 export default function GestionPostulacionesScreen() {
   const [postulaciones, setPostulaciones] = useState<Postulacion[]>([]);
   const [cargando, setCargando] = useState(true);
+  const [perfilSeleccionado, setPerfilSeleccionado] = useState<Postulacion | null>(null);
 
   const cargarPostulaciones = async () => {
     setCargando(true);
@@ -32,6 +36,8 @@ export default function GestionPostulacionesScreen() {
       .from('postulaciones')
       .select(`
         id,
+        candidato_id,
+        vacante_id,
         estado,
         cv_path,
         candidatos(nombre_completo, email),
@@ -53,6 +59,8 @@ export default function GestionPostulacionesScreen() {
 
         return {
           id: item.id,
+          candidato_id: item.candidato_id,
+          vacante_id: item.vacante_id,
           candidato: candidato?.nombre_completo || 'Sin nombre',
           email: candidato?.email || '',
           vacante: vacante?.titulo || 'Sin título',
@@ -105,6 +113,17 @@ export default function GestionPostulacionesScreen() {
     }
   };
 
+  if (perfilSeleccionado) {
+  return (
+    <PerfilCandidatoScreen
+      candidatoId={perfilSeleccionado.candidato_id}
+      vacanteId={perfilSeleccionado.vacante_id}
+      cvPath={perfilSeleccionado.cv_path}
+      volver={() => setPerfilSeleccionado(null)}
+    />
+  );
+}
+
   return (
     <View style={styles.container}>
       <Text style={styles.titulo}>Gestión de Postulaciones</Text>
@@ -142,9 +161,9 @@ export default function GestionPostulacionesScreen() {
 
               <TouchableOpacity
                 style={styles.botonCV}
-                onPress={() => verCV(item.cv_path)}
+                onPress={() => setPerfilSeleccionado(item)}
               >
-                <Text style={styles.textoBoton}>Ver CV (PDF)</Text>
+                <Text style={styles.textoBoton}>Ver Perfil y analizar con IA</Text>
               </TouchableOpacity>
 
               <Text style={styles.etiqueta}>Cambiar estado:</Text>
