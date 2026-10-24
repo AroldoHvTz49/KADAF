@@ -86,12 +86,38 @@ export default function Reclutador({ navigation }: { navigation: any }) {
 
   const maximo = Math.max(1, ...datosMensuales.map(x => Math.max(x.vacantes, x.candidatos)));
 
+  //funcion de cerrar sesion
+  const cerrarSesion = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    alert('No se pudo cerrar sesión: ' + error.message);
+    return;
+  }
+
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem('kadaf_rol');
+  }
+
+  navigation.reset({
+    index: 0,
+    routes: [{ name: 'Login' }]
+  });
+};
+
+
   return (
     <SafeAreaView style={styles.pantalla}>
       {seccionActiva === 'Inicio' ?(
       <ScrollView contentContainerStyle={styles.contenido}>
         <Text style={styles.logo}>KADAF</Text>
-        <Text style={styles.titulo}>Panel de reclutador</Text>
+         <View style={styles.encabezadoFila}>
+            <Text style={styles.titulo}>Panel de reclutador</Text>
+
+            <Pressable style={styles.botonCerrarSesion} onPress={cerrarSesion}>
+              <Text style={styles.textoCerrarSesion}>Cerrar sesión</Text>
+            </Pressable>
+        </View>
 
         <View style={styles.tarjetas}>
           {[
@@ -165,7 +191,7 @@ export default function Reclutador({ navigation }: { navigation: any }) {
 
       {/* Menú fijo al final de la pantalla */}
       <View style={styles.menu}>
-        {['Inicio', 'Vacantes', 'Postulaciones', 'Perfil'].map(nombre => (
+        {['Inicio', 'Vacantes', 'Postulaciones'].map(nombre => (
           <Pressable key={nombre} onPress={() => setSeccionActiva(nombre)} style={styles.opcion}>
             <Text style={[styles.opcionMenu, seccionActiva === nombre && styles.activo]}>
               {nombre}
@@ -189,16 +215,24 @@ const styles = StyleSheet.create({
   },
 
   // Encabezado
+  encabezadoFila: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginVertical: 12,
+  gap: 10
+},
   logo: {
     fontSize: 26,
     fontWeight: 'bold',
     color: '#2563EB',
   },
   titulo: {
+    flexShrink: 1,
     fontSize: 21,
     fontWeight: 'bold',
+    //marginVertical: 12,
     color: '#172033',
-    marginVertical: 12,
   },
 
   // Tarjetas de estadísticas
@@ -301,28 +335,46 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 
-  // Menú inferior
+  // Menú inferior el de los navs
   menu: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingVertical: 16,
     paddingHorizontal: 8,
-    backgroundColor: '#FFF',
+    backgroundColor: '#263A75',
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
+    borderTopColor: '#263A75',
   },
   opcion: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 4,
+    paddingVertical: 10,
+    marginHorizontal: 4,
+    borderRadius: 8,
   },
   opcionMenu: {
     fontSize: 12,
-    color: '#667085',
+    color: '#DCE6F1',
   },
   activo: {
-    color: '#2563EB',
+    color: '#FFFFFF',
     fontWeight: 'bold',
   },
+
+  botonCerrarSesion: {
+  backgroundColor: '#FFFFFF',
+  borderWidth: 1,
+  borderColor: '#DC2626',
+  paddingHorizontal: 12,
+  paddingVertical: 9,
+  borderRadius: 8,
+  alignItems: 'center'
+},
+
+textoCerrarSesion: {
+  color: '#DC2626',
+  fontWeight: 'bold',
+  fontSize: 12
+},
 });

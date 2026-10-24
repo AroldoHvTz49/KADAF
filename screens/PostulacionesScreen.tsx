@@ -127,26 +127,140 @@ export default function PostulacionesScreen({ navigation, route }: { navigation:
 }
 
 const styles = StyleSheet.create({
-  pantalla: { flex: 1, backgroundColor: '#0F172A' },
-  encabezado: { padding: 20, paddingTop: 26, gap: 8 },
-  volver: { color: '#38BDF8', fontWeight: '700' },
-  titulo: { color: 'white', fontSize: 25, fontWeight: '800' },
-  subtitulo: { color: '#94A3B8' },
-  seccion: { backgroundColor: '#1E293B', padding: 16, marginHorizontal: 16, borderRadius: 12 },
-  texto: { color: 'white', marginBottom: 10 },
-  boton: { backgroundColor: '#0284C7', padding: 14, borderRadius: 9, alignItems: 'center' },
-  botonTexto: { color: 'white', fontWeight: 'bold' },
-  estados: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, padding: 16 },
-  pestana: { backgroundColor: '#1E293B', borderRadius: 8, paddingHorizontal: 10, paddingVertical: 10 },
-  activa: { backgroundColor: '#0284C7' },
-  pestanaTexto: { color: '#CBD5E1', fontSize: 12, fontWeight: '700' },
-  activaTexto: { color: 'white' },
-  lista: { paddingHorizontal: 16, paddingBottom: 32, gap: 12 },
-  tarjeta: { backgroundColor: '#1E293B', borderRadius: 12, padding: 16, gap: 7 },
-  nombre: { color: 'white', fontSize: 16, fontWeight: '700' },
-  dato: { color: '#CBD5E1' },
-  botonPDF: { borderRadius: 8, padding: 10, marginTop: 6, backgroundColor: '#334155', alignSelf: 'flex-start' },
-  botonPDFTexto: { color: '#38BDF8', fontWeight: '700' },
-  error: { color: '#FCA5A5', paddingHorizontal: 16, marginBottom: 10 },
-  vacio: { color: '#94A3B8', textAlign: 'center', marginTop: 30 },
+  pantalla: {
+    flex: 1,
+    backgroundColor: '#F4F6FA'
+  },
+
+  encabezado: {
+    backgroundColor: '#263A75',
+    padding: 20,
+    paddingTop: 26,
+    gap: 8
+  },
+
+  volver: {
+    color: '#FFFFFF',
+    fontWeight: '700'
+  },
+
+  titulo: {
+    color: '#FFFFFF',
+    fontSize: 25,
+    fontWeight: '800'
+  },
+
+  subtitulo: {
+    color: '#E8EDFF'
+  },
+
+  seccion: {
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+    marginHorizontal: 16,
+    marginTop: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#DFE4EE'
+  },
+
+  texto: {
+    color: '#20283B',
+    marginBottom: 10,
+    fontWeight: '600'
+  },
+
+  boton: {
+    backgroundColor: '#263A75',
+    padding: 14,
+    borderRadius: 9,
+    alignItems: 'center'
+  },
+
+  botonTexto: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
+    textAlign: 'center'
+  },
+
+  estados: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 6,
+    padding: 16
+  },
+
+  pestana: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: '#DFE4EE'
+  },
+
+  activa: {
+    backgroundColor: '#263A75',
+    borderColor: '#263A75'
+  },
+
+  pestanaTexto: {
+    color: '#68738A',
+    fontSize: 12,
+    fontWeight: '700'
+  },
+
+  activaTexto: {
+    color: '#FFFFFF'
+  },
+
+  lista: {
+    paddingHorizontal: 16,
+    paddingBottom: 32,
+    gap: 12
+  },
+
+  tarjeta: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    gap: 7,
+    borderWidth: 1,
+    borderColor: '#DFE4EE'
+  },
+
+  nombre: {
+    color: '#20283B',
+    fontSize: 16,
+    fontWeight: '700'
+  },
+
+  dato: {
+    color: '#68738A'
+  },
+
+  botonPDF: {
+    borderRadius: 8,
+    padding: 10,
+    marginTop: 6,
+    backgroundColor: '#E8EDFF',
+    alignSelf: 'flex-start'
+  },
+
+  botonPDFTexto: {
+    color: '#263A75',
+    fontWeight: '700'
+  },
+
+  error: {
+    color: '#DC2626',
+    paddingHorizontal: 16,
+    marginBottom: 10
+  },
+
+  vacio: {
+    color: '#68738A',
+    textAlign: 'center',
+    marginTop: 30
+  }
 });

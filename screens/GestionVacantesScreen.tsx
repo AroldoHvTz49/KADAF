@@ -1,4 +1,3 @@
-
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
@@ -30,11 +29,11 @@ type Vacante = {
 };
 
 const COLORES = {
-  fondo: '#F4F6FA',
-  azul: '#263A75',
-  azulClaro: '#E8EDFF',
-  texto: '#20283B',
-  secundario: '#68738A',
+  fondo: '#F3F6FA',
+  azul: '#17365D',
+  azulClaro: '#D8F1EF',
+  texto: '#17365D',
+  secundario: '#667085',
   blanco: '#FFFFFF',
   borde: '#DFE4EE',
   verde: '#16794B',
@@ -69,14 +68,6 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
     setMensaje(texto);
     setTipoMensaje(tipo);
   };
-
-  const cerrarSesion = async () => {
-    if(Platform.OS === 'web'){
-      localStorage.removeItem('kadaf_rol');
-    }
-    await supabase.auth.signOut();
-    navigation.replace('Login');
-};
 
   const cargarVacantes = useCallback(async () => {
     setCargando(true);
@@ -356,21 +347,6 @@ export default function GestionVacantesScreen({ navigation }: { navigation: any 
         <Text style={styles.subtituloEncabezado}>
           Panel de administración
         </Text>
-
-        <TouchableOpacity
-            onPress={cerrarSesion}
-            style={{
-                backgroundColor: '#334155',
-                paddingVertical: 8,
-                paddingHorizontal: 14,
-                borderRadius: 8,
-            }}
-          >
-              <Text style={{
-                color: '#CBD5E1',
-                fontSize: 12,
-                fontWeight: '700',}}> Cerrar sesión</Text>
-          </TouchableOpacity>
       </View>
 
       <ScrollView

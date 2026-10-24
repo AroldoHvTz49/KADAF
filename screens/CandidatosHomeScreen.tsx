@@ -148,7 +148,7 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
         <TextInput
           style={styles.searchInput}
           placeholder="Buscar por puesto, empresa o ubicación..."
-          placeholderTextColor="#94A3B8"
+          placeholderTextColor="#68738A"
           value={busqueda}
           onChangeText={handleBusqueda}
           autoCapitalize="none"
@@ -158,7 +158,7 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
       
       {loading ? (
         <View style={styles.centerContainer}>
-          <ActivityIndicator size="large" color="#38BDF8" />
+          <ActivityIndicator size="large" color="#263A75" />
           <Text style={styles.loadingText}>Cargando vacantes...</Text>
         </View>
       ) : (
@@ -221,7 +221,7 @@ export default function CandidatosHomeScreen({ navigation }: { navigation?: any 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F4F6FA',
     paddingHorizontal: 20,
     paddingTop: 16,
   },
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   badge: {
-    color: '#38BDF8',
+    color: '#263A75',
     fontSize: 11,
     fontWeight: '800',
     letterSpacing: 1.5,
@@ -243,16 +243,16 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#F8FAFC',
+    color: '#20283B',
   },
   logoutButton: {
-    backgroundColor: '#334155',
+    backgroundColor: '#DFE4EE',
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 8,
   },
   logoutButtonText: {
-    color: '#CBD5E1',
+    color: '#263A75',
     fontSize: 12,
     fontWeight: '700',
   },
@@ -261,13 +261,13 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   searchInput: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#DFE4EE',
     borderRadius: 12,
     paddingHorizontal: 16,
     height: 48,
-    color: '#F8FAFC',
+    color: '#20283B',
     fontSize: 15,
   },
   
@@ -284,12 +284,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',   
   },
   card: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#FFFFFF',
     borderRadius: 14,
     padding: 18,
     marginBottom: 14,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#DFE4EE',
   },
   cardHeader: {
     flexDirection: 'row',
@@ -300,40 +300,40 @@ const styles = StyleSheet.create({
   jobTitle: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#F8FAFC',
+    color: '#20283B',
     flex: 1,
     marginRight: 8,
   },
   salaryTag: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#38BDF8',
-    backgroundColor: '#0F172A',
+    color: '#263A75',
+    backgroundColor: '#F4F6FA',
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#0284C7',
+    borderColor: '#263A75',
   },
   companyText: {
     fontSize: 14,
-    color: '#CBD5E1',
+    color: '#68738A',
     fontWeight: '600',
     marginBottom: 4,
   },
   locationText: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#68738A',
     marginBottom: 8,
   },
   descriptionText: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#68738A',
     lineHeight: 18,
     marginBottom: 14,
   },
   applyButton: {
-    backgroundColor: '#0284C7',
+    backgroundColor: '#263A75',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
@@ -351,12 +351,12 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   loadingText: {
-    color: '#94A3B8',
+    color: '#68738A',
     marginTop: 12,
     fontSize: 14,
   },
   emptyText: {
-    color: '#94A3B8',
+    color: '#68738A',
     fontSize: 14,
     textAlign: 'center',
   },
@@ -370,14 +370,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   modalCard: {
-    backgroundColor: '#1E293B',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
     width: '100%',
     maxWidth: 360,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#DFE4EE',
   },
   iconCircle: {
     width: 54,
@@ -398,38 +398,38 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#F8FAFC',
+    color: '#20283B',
     marginBottom: 4,
   },
   modalSubtitle: {
     fontSize: 13,
-    color: '#94A3B8',
+    color: '#68738A',
     textAlign: 'center',
     marginBottom: 14,
   },
   modalJobBox: {
-    backgroundColor: '#0F172A',
+    backgroundColor: '#F4F6FA',
     borderRadius: 10,
     padding: 12,
     width: '100%',
     alignItems: 'center',
     marginBottom: 18,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: '#DFE4EE',
   },
   modalJobTitle: {
-    color: '#38BDF8',
+    color: '#263A75',
     fontSize: 15,
     fontWeight: '700',
     textAlign: 'center',
   },
   modalCompanyText: {
-    color: '#CBD5E1',
+    color: '#68738A',
     fontSize: 13,
     marginTop: 2,
   },
   modalButton: {
-    backgroundColor: '#0284C7',
+    backgroundColor: '#263A75',
     paddingVertical: 10,
     width: '100%',
     borderRadius: 8,
