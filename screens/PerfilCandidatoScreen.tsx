@@ -218,7 +218,7 @@ export default function PerfilCandidatoScreen({
     }
   };
 
-  // Funcion para renderizar la pantalla de perfil del candidato 
+  // Funcion para renderizar la pantalla de perfil del candidato
   if (cargando) {
     return (
       <View style={styles.cargando}>
